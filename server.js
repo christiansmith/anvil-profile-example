@@ -1,15 +1,11 @@
-var express = require('express')
+var config = require('./config.production.json')
+  , express = require('express')
   , cors = require('cors')
   , app = express()
   ;
 
 
-var authorize = require('oauth2resource')({
-  provider: 'https://oauth2server-9063.onmodulus.net/',
-  service_id: '8acbda01809b3b9fefdb',
-  service_secret: 'fe02c73b98f713b6d556',
-  scope: 'https://127.0.0.1:3001/profile'
-});
+var authorize = require('oauth2resource')(config);
 
 
 app.configure(function () {
@@ -40,6 +36,6 @@ app.put('/profile', authorize, function (req, res) {
 module.exports = app;
 
 if (!module.parent) { 
-  app.listen(3001); 
-  console.log('service started on 3001');
+  app.listen(process.env.PORT || 3001); 
+  console.log('service started');
 }
