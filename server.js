@@ -21,12 +21,12 @@ app.configure(function () {
 var profiles = {};
 
 // retrieve the profile
-app.get('/profile', authorize, function (req, res) {
+app.get('/v1/profile', authorize, function (req, res) {
   res.json(profiles[req.token.account_id] || {});
 });
 
 // set the profile 
-app.put('/profile', authorize, function (req, res) {
+app.put('/v1/profile', authorize, function (req, res) {
   profiles[req.token.account_id] = req.body;
   res.json({ ok: true });
 });
