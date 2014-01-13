@@ -1,0 +1,16 @@
+{
+  "name": "anvil-profile-example",
+  "version": "0.0.0",
+  "description": "Example of server protected by OAuth2Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Christian Smith",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "~2.1.1",
+    "oauth2resource": "0.0.3",
+    "express": "~3.4.7"
+  }
+}
