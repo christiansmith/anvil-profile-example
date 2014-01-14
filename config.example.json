@@ -1,0 +1,12 @@
+{
+  "authority": {
+    "provider": "https://AUTHSERVER_URI",
+    "service_id": "API_KEY",
+    "service_secret": "API_SECRET",
+    "scope": "https://HOST:PORT/v1/profile"
+  },
+  "redis": {
+    "url": "redis://HOST:PORT",
+    "auth": "PASSWORD"
+  }
+}

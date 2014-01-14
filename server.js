@@ -1,11 +1,13 @@
-var config  = require('./config.production.json')
+var cwd     = process.cwd()
+  , path    = require('path')
+  , env     = process.env.NODE_ENV || 'development'
+  , config  = require(path.join(cwd, 'config.' + env + '.json'))
   , express = require('express')
   , cors    = require('cors')
   , app     = express()
   , client  = require('./redis')(config.redis)
   ;
 
-  console.log(config.authority);
 
 var authorize = require('oauth2resource')(config.authority);
 
