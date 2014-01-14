@@ -1,11 +1,13 @@
-var config = require('./config.production.json')
+var config  = require('./config.production.json')
   , express = require('express')
-  , cors = require('cors')
-  , app = express()
+  , cors    = require('cors')
+  , app     = express()
+  , client  = require('./redis')(config.redis)
   ;
 
+  console.log(config.authority);
 
-var authorize = require('oauth2resource')(config);
+var authorize = require('oauth2resource')(config.authority);
 
 
 app.configure(function () {
@@ -17,25 +19,28 @@ app.configure(function () {
   })
 });
 
-// database
-var profiles = {};
 
 // retrieve the profile
-app.get('/v1/profile', authorize, function (req, res) {
-  res.json(profiles[req.token.account_id] || {});
+app.get('/v1/profile', authorize, function (req, res, next) {
+  client.hget('profiles', req.token.account_id, function (err, json) {
+    if (err) { return next(err); }
+    res.send(json);
+  });
 });
 
-// set the profile 
+// set the profile
 app.put('/v1/profile', authorize, function (req, res) {
-  profiles[req.token.account_id] = req.body;
-  res.json({ ok: true });
+  client.hset('profiles', req.token.account_id, JSON.stringify(req.body), function (err) {
+    if (err) { return next(err); }
+    res.json({ ok: true });
+  });
 });
 
 
 
 module.exports = app;
 
-if (!module.parent) { 
-  app.listen(process.env.PORT || 3001); 
+if (!module.parent) {
+  app.listen(process.env.PORT || 3001);
   console.log('service started');
 }
