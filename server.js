@@ -2,6 +2,7 @@ var cwd     = process.cwd()
   , path    = require('path')
   , env     = process.env.NODE_ENV || 'development'
   , config  = require(path.join(cwd, 'config.' + env + '.json'))
+  , port    = process.env.PORT || config.port || 3001
   , express = require('express')
   , cors    = require('cors')
   , app     = express()
@@ -13,6 +14,7 @@ var authorize = require('oauth2resource')(config.authority);
 
 
 app.configure(function () {
+  app.set('port', port);
   app.use(express.bodyParser());
   app.use(cors());
   app.use(app.router);
@@ -43,6 +45,6 @@ app.put('/v1/profile', authorize, function (req, res) {
 module.exports = app;
 
 if (!module.parent) {
-  app.listen(process.env.PORT || 3001);
-  console.log('service started');
+  app.listen(app.settings.port);
+  console.log('service started on port ', app.settings.port);
 }
